@@ -6,6 +6,12 @@ apply plugin: 'kotlin-parcelize'
 
 apply plugin: 'kotlin-kapt'
 
+def localPropertiesFile = new File(rootProject.projectDir, "local.properties")
+def properties = new Properties()
+if (localPropertiesFile.exists()) {
+    properties.load(new FileInputStream(localPropertiesFile))
+}
+
 android {
     namespace "com.picpay.desafio.android"
     compileSdkVersion 34
@@ -19,9 +25,12 @@ android {
         vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "API_BASE_URL", "${properties['API_BASE_URL']}"
     }
 
     buildFeatures {
+        buildConfig true
         viewBinding true
     }
 
@@ -95,4 +104,7 @@ dependencies {
     androidTestImplementation "androidx.test:runner:$test_runner_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
     androidTestImplementation "androidx.test:core-ktx:$core_ktx_test_version"
+
+    implementation "com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2"
+
 }
