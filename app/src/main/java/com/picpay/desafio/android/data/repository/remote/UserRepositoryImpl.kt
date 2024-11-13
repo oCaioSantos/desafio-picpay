@@ -1,7 +1,5 @@
 package com.picpay.desafio.android.data.repository.remote
 
-import com.picpay.desafio.android.domain.service.PicPayService
-import com.picpay.desafio.android.domain.model.User
 import com.picpay.desafio.android.domain.enums.ResourceType
 import com.picpay.desafio.android.domain.exception.BadParametersException
 import com.picpay.desafio.android.domain.exception.ForbbidenException
@@ -9,7 +7,9 @@ import com.picpay.desafio.android.domain.exception.ResourceNotFoundException
 import com.picpay.desafio.android.domain.exception.ServerDownException
 import com.picpay.desafio.android.domain.exception.UnauthorizedException
 import com.picpay.desafio.android.domain.exception.UnknowErrorException
+import com.picpay.desafio.android.domain.model.User
 import com.picpay.desafio.android.domain.repository.UserRepository
+import com.picpay.desafio.android.domain.service.PicPayService
 import retrofit2.HttpException
 
 class UserRepositoryImpl(

@@ -7,17 +7,19 @@ import java.util.concurrent.TimeUnit
 
 class CacheInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
-        val request = chain.request()
         val cacheControl = CacheControl.Builder()
             .maxAge(1, TimeUnit.HOURS)
             .build()
-        val response = chain.proceed(
-            request.newBuilder()
-                .header("Cache-Control", cacheControl.toString())
+        with(cacheControl) {
+            val response = chain.proceed(
+                chain.request()
+                    .newBuilder()
+                    .header("Cache-Control", this.toString())
+                    .build()
+            )
+            return response.newBuilder()
+                .header("Cache-Control", this.toString())
                 .build()
-        )
-        return response.newBuilder()
-            .header("Cache-Control", cacheControl.toString())
-            .build()
+        }
     }
 }

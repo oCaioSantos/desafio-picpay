@@ -6,11 +6,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.picpay.desafio.android.presentation.recyclerview.UserListAdapter
 import com.picpay.desafio.android.databinding.ActivityMainBinding
+import com.picpay.desafio.android.presentation.recyclerview.UserListAdapter
 import com.picpay.desafio.android.presentation.stateholder.MainStateHolder
 import com.picpay.desafio.android.presentation.viewmodel.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.getViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
@@ -48,8 +49,10 @@ class MainActivity : AppCompatActivity() {
         adapter = UserListAdapter()
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
-        with(getViewModel<MainViewModel>()) {
+        val viewModel: MainViewModel by viewModel()
+        with(viewModel) {
             uiState.observe(this@MainActivity, uiObserver)
+            loadUsers()
         }
     }
 }

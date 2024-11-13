@@ -3,15 +3,19 @@ package com.picpay.desafio.android
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 
 object RecyclerViewMatchers {
 
-    fun atPosition(
+    private fun atPosition(
         position: Int,
         itemMatcher: Matcher<View>
     ) = object : BoundedMatcher<View, RecyclerView>(RecyclerView::class.java) {
@@ -27,11 +31,11 @@ object RecyclerViewMatchers {
     }
 
     fun checkRecyclerViewItem(resId: Int, position: Int, withMatcher: Matcher<View>) {
-        Espresso.onView(ViewMatchers.withId(resId)).check(
-            ViewAssertions.matches(
+        onView(withId(resId)).check(
+            matches(
                 atPosition(
                     position,
-                    ViewMatchers.hasDescendant(withMatcher)
+                    hasDescendant(withMatcher)
                 )
             )
         )

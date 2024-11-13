@@ -1,12 +1,13 @@
 package com.picpay.desafio.android.di
 
-import com.picpay.desafio.android.domain.service.PicPayService
+import androidx.lifecycle.SavedStateHandle
 import com.picpay.desafio.android.common.network.Rest
 import com.picpay.desafio.android.common.network.interceptors.CacheInterceptor
 import com.picpay.desafio.android.common.network.interceptors.NetworkLoggingInterceptor
 import com.picpay.desafio.android.common.utils.getCache
 import com.picpay.desafio.android.data.repository.remote.UserRepositoryImpl
 import com.picpay.desafio.android.domain.repository.UserRepository
+import com.picpay.desafio.android.domain.service.PicPayService
 import com.picpay.desafio.android.domain.usecase.GetUsersUseCase
 import com.picpay.desafio.android.presentation.viewmodel.MainViewModel
 import okhttp3.OkHttpClient
@@ -27,20 +28,27 @@ val appModule = module {
 
     single<PicPayService> {
         Rest.getInstance(
-            get()
+            client = get()
         ).create(PicPayService::class.java)
     }
 
     single<UserRepository> {
-        UserRepositoryImpl(get())
+        UserRepositoryImpl(
+            picPayService = get()
+        )
     }
 
     factory<GetUsersUseCase> {
-        GetUsersUseCase(get())
+        GetUsersUseCase(
+            usersRepository = get()
+        )
     }
 
-    viewModel<MainViewModel> {
-        MainViewModel(get())
+    viewModel<MainViewModel> { (savedStateHandle: SavedStateHandle) ->
+        MainViewModel(
+            savedStateHandle = savedStateHandle,
+            getUsersUseCase = get()
+        )
     }
 
 }
